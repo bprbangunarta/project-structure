@@ -1,6 +1,19 @@
 {
   "version": 1,
   "skills": {
+    "codebase-design": {
+      "source": "mattpocock/skills",
+      "sourceType": "github",
+      "skillPath": "skills/engineering/codebase-design/SKILL.md",
+      "computedHash": "5a17552cc1482f1a40124bf4e6c9dbd90ac0dbb47e71c07d47369f9e5f2ae3b5"
+    },
+    "ui-taste": {
+      "source": "uizze.sh",
+      "sourceUrl": "https://uizze.sh",
+      "sourceType": "well-known",
+      "computedHash": "87972c875fb653a98e50308e873c90697dc2d481d82ac0ee6dc50980bdd9b559",
+      "wellKnownDigest": "sha256:398c2f01b44a792828962a3ea473ddc08a7152f15ad489b2617cad31c9a24baa"
+    },
     "ui-ux-pro-max": {
       "source": "nextlevelbuilder/ui-ux-pro-max-skill",
       "sourceType": "github",

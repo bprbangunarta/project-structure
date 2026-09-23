@@ -117,6 +117,8 @@ update lewat mekanisme skills.sh supaya `skills-lock.json` tetap akurat.
 |---|---|
 | `ui-ux-pro-max` | Saat mengerjakan struktur UI, komponen, design system, aksesibilitas, interaksi, responsive layout — referensi cepat untuk style/palette/font-pairing/ikon/chart. |
 | `web-design-guidelines` | Saat diminta review UI/aksesibilitas/UX terhadap best practice (mis. "review UI ini", "audit accessibility"). |
+| `ui-taste` (uizze.sh) | **Setiap kali membangun, redesign, atau review komponen/layar UI** — playbook anti-"AI slop" untuk hierarki visual, layout, dan detail polish. Ini yang secara eksplisit menyasar masalah "tampilan rapi tapi seleranya generik" — dipakai bukan cuma pas styling awal, tapi juga di setiap komponen baru dan sebagai **visual review terakhir** sebelum task UI dianggap selesai (lihat bagian 5, langkah 3). |
+| `codebase-design` (mattpocock/skills) | Saat merancang/merestrukturisasi modul kode (bukan UI) — prinsip modul yang "dalam" (interface kecil, perilaku banyak di belakangnya), testable, gampang dipelihara. Pakai saat bikin service/module baru di backend atau struktur komponen kompleks di frontend, bukan untuk perubahan kecil satu file. |
 
 **Asumsi konteks produk saat ini: internal admin dashboard, bukan landing page/marketing
 site.** Ini asumsi kerja dari percakapan waktu template ini disusun — SAMA seperti stack di

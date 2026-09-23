@@ -61,6 +61,10 @@ dan aturan di bawah, aturan di bawah yang menang:
   - Skill `ui-ux-pro-max` (lihat AGENTS.md bagian 8) relevan persis untuk kasus ini — pakai
     saat membangun komponen data-dense (dashboard, tabel, stat card), jangan cuma dipakai untuk
     styling awal lalu dilupakan pas nambah komponen baru berikutnya.
+  - **Sebelum melaporkan task UI selesai, jalankan visual review pakai skill `ui-taste`**
+    (lihat AGENTS.md bagian 8) — ini bukan opsional untuk task yang menyentuh UI. Tujuannya
+    memastikan hasilnya nggak cuma "rapi secara struktur" tapi juga punya perhatian ke detail
+    selayaknya UI/UX designer (hierarchy, spacing, polish), bukan tampilan generik/"AI slop".
 - **Definition of done = benar-benar diverifikasi** (lihat AGENTS.md bagian 5, langkah 3) —
   kode yang "kelihatannya benar" tapi belum dijalankan/ditest bukan selesai.
 - Kalau demi deadline terpaksa ambil jalan pintas/technical debt, itu harus **keputusan sadar
@@ -95,6 +99,20 @@ yang akhirnya dipilih:
   tengah jalan. Layer di atasnya (JSON response API, misalnya) boleh beda konvensi (mis.
   `camelCase` sesuai kebiasaan JS/JSON) — itu urusan mapping di serialization layer (Pydantic
   alias, dsb.), bukan alasan untuk bikin nama kolom database sendiri ikut campur.
+- **Bahasa untuk identifier teknis (tabel, kolom, variabel, fungsi, nama file) wajib satu
+  bahasa konsisten — default Bahasa Inggris.** Domain project ini sering punya istilah dalam
+  Bahasa Indonesia (nasabah, tunggakan, plafon, dst.), dan itu gampang bikin identifier teknis
+  ikut campur (`customers` di satu tabel, `tunggakan` di tabel lain) — sama seperti masalah
+  case-mixing di atas, ini bikin schema terasa acak dan menyulitkan pencarian/konsistensi
+  jangka panjang. **Default: semua identifier teknis pakai Bahasa Inggris** (mis. `customers`,
+  `overdue_amount`, `credit_limit`), walaupun istilah bisnisnya dalam Bahasa Indonesia —
+  terjemahkan secara konsisten, jangan campur. Konfirmasi sekali di awal project (bareng
+  pertanyaan Database & naming case di bagian 9); kalau user minta istilah Indonesia
+  dipertahankan di identifier (mis. alasan domain/istilah baku), itu juga boleh, TAPI harus
+  konsisten dipakai di semua identifier, bukan campur tergantung siapa yang nulis tabel itu.
+  **Teks yang tampil ke user (label UI, pesan error, dokumentasi)** boleh dan sebaiknya tetap
+  Bahasa Indonesia — aturan ini cuma untuk identifier teknis di kode/schema, bukan konten
+  user-facing.
 - Konvensi file/folder, linter, formatter, dan testing framework spesifik-stack ditambahkan
   di sini setelah AGENTS.md bagian 9 (Stack teknis) diisi — jangan biarkan bagian ini kosong
   lagi begitu stack final.

@@ -74,6 +74,20 @@ disiapkan dari awal (memory, backlog, alur kerja per-task, skill yang relevan).
   verifikasi UI sekarang wajib pakai konten realistis + cek di minimal 2 lebar layar, plus
   panduan konkret (truncate, responsive text size) dan pengingat pakai skill `ui-ux-pro-max`
   untuk komponen data-dense, bukan cuma dipakai di awal lalu lupa.
+- **[2026-09-23] Pasang skill `ui-taste` (uizze.sh) dan `codebase-design` (mattpocock/skills)**
+  (lihat AGENTS.md bagian 8) — merespons temuan pengujian: hasil UI rapi secara struktur tapi
+  "selera"-nya generik/AI-slop, kurang perhatian detail selayaknya UI/UX designer profesional.
+  `ui-taste` (16K install) menyasar persis masalah ini dan sekarang wajib dipakai sebagai
+  visual review sebelum task UI dilaporkan selesai (lihat `docs/agents/code-standards.md`).
+  `codebase-design` (663K install, author dikenal) dipasang sekalian untuk kualitas arsitektur
+  kode backend/frontend, bukan cuma UI. Instal via `npx skills add https://uizze.sh -y` dan
+  `npx skills add mattpocock/skills -s codebase-design -y`.
+- **[2026-09-23] Bahasa identifier teknis (tabel, kolom, variabel, fungsi, file) wajib satu
+  bahasa konsisten, default Bahasa Inggris** (lihat `docs/agents/code-standards.md`) —
+  ditemukan dari pengujian yang sama: setelah naming case dibenerin (snake_case), penamaan
+  tabelnya sendiri ternyata campur Bahasa Inggris dan Indonesia. Konfirmasi sekali di awal
+  project bareng pertanyaan database/naming case; teks user-facing (label UI, pesan) tetap
+  boleh Bahasa Indonesia, aturan ini cuma untuk identifier teknis.
 
 ## Open questions
 
