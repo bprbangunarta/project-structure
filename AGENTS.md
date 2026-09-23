@@ -33,6 +33,21 @@ dan aturan di bawah, aturan di bawah yang menang:
 - **Perubahan skema database lewat migration file**, bukan edit manual/ad-hoc ke database.
 - **Pilih dependency yang maintained**, hindari package abandoned/deprecated untuk hal krusial,
   dan jangan nambah dependency berat untuk kebutuhan yang bisa diselesaikan dengan sedikit kode.
+- **Perbaikan bug = root cause + cek dampak lintas kode, bukan tambal di satu titik.** Sebelum
+  menganggap fix selesai: cari apakah pola/logic yang sama dipakai di tempat lain (form lain,
+  endpoint lain, komponen sejenis) yang mungkin punya bug yang sama, dan perbaiki bersamaan
+  (atau minimal laporkan ke user kalau scope-nya besar). Kalau fix yang benar butuh perubahan
+  struktural lebih luas (mis. logic dipindah ke shared function/component), lakukan itu —
+  jangan hindari demi "biar diffnya kecil". Fix lokal yang meninggalkan duplikat bug di tempat
+  lain bukan fix yang selesai, itu tambal sulam.
+- **Validasi & constraint UI adalah satu paket, bukan dua task terpisah.** Setiap kali
+  menambah/mengubah aturan validasi field (format, panjang, karakter yang diizinkan, required),
+  implementasikan pasangannya di UI pada saat yang sama — input type/mode, pattern, maxlength,
+  keyboard numeric untuk field angka, dst. "Validasi backend benar tapi UI masih terima input
+  bebas" dianggap belum selesai, bukan boleh diperbaiki nanti. Untuk field dengan pola yang
+  berulang di banyak form (nomor telepon, email, NIK, dst.), buat reusable field
+  component/schema yang membungkus validasi + constraint UI sekaligus (lihat bagian 10 untuk
+  saran konkret di stack default), supaya tidak diperbaiki manual satu-satu tiap ada field baru.
 - **Definition of done = benar-benar diverifikasi** (lihat bagian 8, langkah 3) — kode yang
   "kelihatannya benar" tapi belum dijalankan/ditest bukan selesai.
 - Kalau demi deadline terpaksa ambil jalan pintas/technical debt, itu harus **keputusan sadar
@@ -173,6 +188,14 @@ kalau user memilih stack full-stack opinionated (mis. Next.js App Router, Larave
 dengan template server-side) yang punya struktur folder sendiri, **konvensi framework itu
 yang menang** — jangan paksa masuk ke split `backend/`/`frontend/` generik ini kalau
 bertentangan. Diskusikan dan update bagian 5 kalau itu terjadi.
+
+**Catatan implementasi untuk pola validasi+UI (lihat bagian 2):** dengan FastAPI, validasi
+field didefinisikan lewat Pydantic model — field constraint (`pattern`, `max_length`, tipe,
+dst.) ada di satu tempat sebagai source of truth. Di React, jangan bikin ulang aturan itu
+secara manual di tiap form; bungkus tiap tipe field yang berulang (nomor telepon, email, NIK,
+dst.) jadi komponen input reusable (mis. `<PhoneNumberInput />`) yang sudah include `inputMode`/
+`pattern`/`maxLength` yang sesuai, supaya field baru tinggal pakai komponennya, bukan menulis
+constraint UI dari nol tiap kali.
 
 ## 11. Konvensi umum
 

@@ -38,6 +38,13 @@ disiapkan dari awal (memory, backlog, alur kerja per-task, skill yang relevan).
   (lihat AGENTS.md bagian 3). Ini merespons pengalaman berulang: agent ditunjukkan referensi
   (mis. screenshot UI) lalu mencontek 100% dan lupa aturan project yang sudah ditulis. Kalau
   referensi bentrok sama aturan tertulis, wajib stop dan tanya user, bukan diam-diam milih.
+- **[2026-09-23] Bug fix wajib cek dampak lintas kode + validasi & UI constraint satu paket**
+  (lihat AGENTS.md bagian 2 & 10) — merespons pengalaman berulang: (1) perbaikan cuma di satu
+  titik tanpa cek pola serupa di tempat lain → tambal sulam menumpuk; (2) validasi backend
+  benar tapi UI field (mis. nomor telepon) masih terima input bebas, jadi perbaikan berulang
+  tiap ada field baru. Solusi: definition-of-done sekarang eksplisit mencakup cek dampak
+  lintas kode untuk bug fix, dan reusable field component (validasi + UI constraint sekaligus)
+  untuk field dengan pola berulang.
 
 ## Open questions
 
