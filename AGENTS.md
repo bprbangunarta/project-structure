@@ -25,7 +25,7 @@ menggelembungkan file index ini:
 
 - **[docs/agents/code-standards.md](docs/agents/code-standards.md)** — standar production-ready
   (bukan prototipe), aturan bug fix lintas-kode, pairing validasi+UI, dan konvensi penulisan
-  kode. Baca sebelum langkah "Implement" (bagian 5, langkah 2).
+  kode. Baca sebelum langkah "Implement" (bagian 5, langkah 3).
 - **[docs/agents/handling-references.md](docs/agents/handling-references.md)** — cara
   menangani referensi eksternal (screenshot UI, kode dari luar, situs lain) supaya tidak
   dicontek 100% dan melanggar aturan project. Baca setiap kali user kasih referensi, sebagai
@@ -72,16 +72,27 @@ pipeline otomatis — cukup jalankan langkah-langkahnya secara sadar):
 1. **Pahami maksud** — kalau instruksi ambigu atau berdampak besar, klarifikasi dulu ke user
    sebelum implementasi. Kalau user kasih referensi eksternal, baca
    [docs/agents/handling-references.md](docs/agents/handling-references.md) dulu.
-2. **Implement** — baca [docs/agents/code-standards.md](docs/agents/code-standards.md) kalau
+2. **Cek skill yang relevan SEBELUM mulai implement** — skill di `.agents/skills/` (tabel
+   lengkap di bagian 8) TIDAK otomatis kebaca, harus dipanggil aktif. Sebagai checklist wajib
+   tiap task, bukan cuma referensi pasif:
+   - Task menyentuh UI/komponen/layout? → panggil `ui-ux-pro-max`.
+   - Task merancang/merestrukturisasi module/service (bukan sekadar edit kecil)? → panggil
+     `codebase-design`.
+   - Task diminta review UI/aksesibilitas? → panggil `web-design-guidelines`.
+   - (Lihat bagian 8 untuk daftar lengkap + kondisi kapan skill lain dipasang/dipanggil.)
+3. **Implement** — baca [docs/agents/code-standards.md](docs/agents/code-standards.md) kalau
    belum di sesi ini, lalu kerjakan perubahan sesuai standar & konvensi di situ.
-3. **Verifikasi** — jalankan test/build/lint yang relevan kalau tersedia; untuk perubahan UI,
+4. **Verifikasi** — jalankan test/build/lint yang relevan kalau tersedia; untuk perubahan UI,
    coba jalankan aplikasinya, jangan cuma percaya diri dari membaca kode. Komponen yang
    otomatis responsive (grid/flex dari library) TIDAK menjamin kontennya aman — cek eksplisit
    pakai data/teks yang realistis (bukan sample pendek) di beberapa ukuran layar, lihat detail
-   di [docs/agents/code-standards.md](docs/agents/code-standards.md).
-4. **Laporkan** — ringkas apa yang berubah dan langkah berikutnya, jangan diam-diam
-   menganggap selesai tanpa verifikasi di atas.
-5. **Catat kalau perlu** — kalau task ini mengandung keputusan penting (bukan cuma detail
+   di [docs/agents/code-standards.md](docs/agents/code-standards.md). **Untuk task UI, wajib
+   panggil skill `ui-taste`** sebagai visual review terakhir sebelum lapor selesai — bukan
+   opsional.
+5. **Laporkan** — ringkas apa yang berubah, **skill apa yang dipanggil di langkah 2 & 4**, dan
+   langkah berikutnya. Jangan diam-diam menganggap selesai tanpa verifikasi di atas — dan
+   jangan diam-diam skip pemanggilan skill yang relevan tanpa bilang alasannya.
+6. **Catat kalau perlu** — kalau task ini mengandung keputusan penting (bukan cuma detail
    implementasi), update `memory/PRD.md` sesuai bagian 6.
 
 ## 6. Memory persisten (`memory/PRD.md`)
@@ -117,7 +128,7 @@ update lewat mekanisme skills.sh supaya `skills-lock.json` tetap akurat.
 |---|---|
 | `ui-ux-pro-max` | Saat mengerjakan struktur UI, komponen, design system, aksesibilitas, interaksi, responsive layout — referensi cepat untuk style/palette/font-pairing/ikon/chart. |
 | `web-design-guidelines` | Saat diminta review UI/aksesibilitas/UX terhadap best practice (mis. "review UI ini", "audit accessibility"). |
-| `ui-taste` (uizze.sh) | **Setiap kali membangun, redesign, atau review komponen/layar UI** — playbook anti-"AI slop" untuk hierarki visual, layout, dan detail polish. Ini yang secara eksplisit menyasar masalah "tampilan rapi tapi seleranya generik" — dipakai bukan cuma pas styling awal, tapi juga di setiap komponen baru dan sebagai **visual review terakhir** sebelum task UI dianggap selesai (lihat bagian 5, langkah 3). |
+| `ui-taste` (uizze.sh) | **Setiap kali membangun, redesign, atau review komponen/layar UI** — playbook anti-"AI slop" untuk hierarki visual, layout, dan detail polish. Ini yang secara eksplisit menyasar masalah "tampilan rapi tapi seleranya generik" — dipakai bukan cuma pas styling awal, tapi juga di setiap komponen baru dan sebagai **visual review terakhir** sebelum task UI dianggap selesai (lihat bagian 5, langkah 4). |
 | `codebase-design` (mattpocock/skills) | Saat merancang/merestrukturisasi modul kode (bukan UI) — prinsip modul yang "dalam" (interface kecil, perilaku banyak di belakangnya), testable, gampang dipelihara. Pakai saat bikin service/module baru di backend atau struktur komponen kompleks di frontend, bukan untuk perubahan kecil satu file. |
 
 **Asumsi konteks produk saat ini: internal admin dashboard, bukan landing page/marketing

@@ -88,6 +88,14 @@ disiapkan dari awal (memory, backlog, alur kerja per-task, skill yang relevan).
   tabelnya sendiri ternyata campur Bahasa Inggris dan Indonesia. Konfirmasi sekali di awal
   project bareng pertanyaan database/naming case; teks user-facing (label UI, pesan) tetap
   boleh Bahasa Indonesia, aturan ini cuma untuk identifier teknis.
+- **[2026-09-23] Pemanggilan skill dijadikan langkah wajib di alur kerja, bukan cuma tabel
+  referensi** (lihat AGENTS.md bagian 5, langkah 2 baru) — user amati skill `ui-ux-pro-max`,
+  `web-design-guidelines`, `codebase-design` nggak pernah dipanggil spontan padahal sudah ada
+  di tabel "kapan dipakai" bagian 8; cuma `ui-taste` yang kepake karena diminta eksplisit.
+  Akar masalah: skill tidak otomatis ke-load, harus dipanggil aktif oleh model di momen itu —
+  tabel referensi pasif tidak cukup untuk memicu itu. Solusi: alur kerja per-task sekarang
+  punya langkah 2 "Cek skill yang relevan" sebagai checklist eksplisit sebelum implement, dan
+  langkah "Laporkan" sekarang wajib sebutkan skill apa yang dipanggil (atau kenapa tidak).
 
 ## Open questions
 

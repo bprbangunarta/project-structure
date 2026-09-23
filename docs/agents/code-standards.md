@@ -1,6 +1,6 @@
 # Standar kode & kualitas
 
-> Dirujuk dari [AGENTS.md](../../AGENTS.md) bagian 5 (Alur kerja per-task), langkah 2
+> Dirujuk dari [AGENTS.md](../../AGENTS.md) bagian 5 (Alur kerja per-task), langkah 3
 > (Implement). Baca file ini sebelum menulis/mengubah kode kalau belum dibaca di sesi ini —
 > ini bukan bacaan opsional, ini bagian dari definisi "implement dengan benar".
 
@@ -65,7 +65,7 @@ dan aturan di bawah, aturan di bawah yang menang:
     (lihat AGENTS.md bagian 8) — ini bukan opsional untuk task yang menyentuh UI. Tujuannya
     memastikan hasilnya nggak cuma "rapi secara struktur" tapi juga punya perhatian ke detail
     selayaknya UI/UX designer (hierarchy, spacing, polish), bukan tampilan generik/"AI slop".
-- **Definition of done = benar-benar diverifikasi** (lihat AGENTS.md bagian 5, langkah 3) —
+- **Definition of done = benar-benar diverifikasi** (lihat AGENTS.md bagian 5, langkah 4) —
   kode yang "kelihatannya benar" tapi belum dijalankan/ditest bukan selesai.
 - Kalau demi deadline terpaksa ambil jalan pintas/technical debt, itu harus **keputusan sadar
   yang dikomunikasikan ke user dan dicatat di `memory/PRD.md`** — bukan diam-diam dilakukan
