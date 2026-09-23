@@ -75,7 +75,10 @@ pipeline otomatis — cukup jalankan langkah-langkahnya secara sadar):
 2. **Implement** — baca [docs/agents/code-standards.md](docs/agents/code-standards.md) kalau
    belum di sesi ini, lalu kerjakan perubahan sesuai standar & konvensi di situ.
 3. **Verifikasi** — jalankan test/build/lint yang relevan kalau tersedia; untuk perubahan UI,
-   coba jalankan aplikasinya, jangan cuma percaya diri dari membaca kode.
+   coba jalankan aplikasinya, jangan cuma percaya diri dari membaca kode. Komponen yang
+   otomatis responsive (grid/flex dari library) TIDAK menjamin kontennya aman — cek eksplisit
+   pakai data/teks yang realistis (bukan sample pendek) di beberapa ukuran layar, lihat detail
+   di [docs/agents/code-standards.md](docs/agents/code-standards.md).
 4. **Laporkan** — ringkas apa yang berubah dan langkah berikutnya, jangan diam-diam
    menganggap selesai tanpa verifikasi di atas.
 5. **Catat kalau perlu** — kalau task ini mengandung keputusan penting (bukan cuma detail

@@ -41,6 +41,26 @@ dan aturan di bawah, aturan di bawah yang menang:
   component/schema yang membungkus validasi + constraint UI sekaligus (lihat AGENTS.md bagian
   9 untuk saran konkret di stack default), supaya tidak diperbaiki manual satu-satu tiap ada
   field baru.
+- **Responsivitas layout ≠ responsivitas konten — keduanya wajib dicek terpisah.** Grid/flex
+  dari component library otomatis menyesuaikan ukuran container, tapi TIDAK otomatis menjamin
+  teks/angka di dalamnya muat. Sumber bug yang sering luput: angka besar di stat card (mis.
+  "Rp 1.250.000.000") kepotong/meluber, label/nama panjang di tabel bikin kolom melebar tidak
+  wajar, heading yang pas di desktop jadi kepanjangan di mobile. Wajib untuk setiap komponen UI
+  baru yang menampilkan data dinamis:
+  - Uji dengan **konten realistis/terpanjang yang mungkin terjadi**, bukan data sample pendek
+    (mis. nama nasabah terpanjang yang masuk akal, plafon kredit dengan banyak digit) — bukan
+    "Budi" dan "Rp 100".
+  - Cek tampilan di **minimal 2 lebar layar berbeda** (mobile ~375px, desktop) sebelum
+    menganggap selesai — bukan cuma di satu ukuran window default.
+  - Kalau teks berpotensi panjang tak terduga (nama, alamat, keterangan), gunakan truncate +
+    tooltip/expand, `line-clamp`, atau text wrapping — jangan biarkan meluber keluar kotak atau
+    andalkan container auto-grow tanpa batas yang malah merusak layout di sekitarnya.
+  - Ukuran teks (angka besar di stat card/dashboard khususnya) pakai unit yang scale wajar
+    (mis. Tailwind responsive text classes `text-xl md:text-2xl`, atau `clamp()`), bukan satu
+    ukuran fixed besar yang diasumsikan selalu muat.
+  - Skill `ui-ux-pro-max` (lihat AGENTS.md bagian 8) relevan persis untuk kasus ini — pakai
+    saat membangun komponen data-dense (dashboard, tabel, stat card), jangan cuma dipakai untuk
+    styling awal lalu dilupakan pas nambah komponen baru berikutnya.
 - **Definition of done = benar-benar diverifikasi** (lihat AGENTS.md bagian 5, langkah 3) —
   kode yang "kelihatannya benar" tapi belum dijalankan/ditest bukan selesai.
 - Kalau demi deadline terpaksa ambil jalan pintas/technical debt, itu harus **keputusan sadar

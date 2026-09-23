@@ -66,6 +66,14 @@ disiapkan dari awal (memory, backlog, alur kerja per-task, skill yang relevan).
   jadi bug nyata (case-folding identifier di PostgreSQL/MySQL). Dikonfirmasi sekali di awal
   project bareng pertanyaan Database, lalu dipatuhi konsisten — layer API/JSON di atasnya
   boleh beda konvensi asal lewat mapping eksplisit, bukan bikin kolom DB ikut campur.
+- **[2026-09-23] Responsivitas konten UI wajib dicek terpisah dari responsivitas layout**
+  (lihat `docs/agents/code-standards.md`) — ditemukan dari pengujian yang sama: layout/grid
+  komponen sudah rapi & otomatis responsive, tapi teks/angka di dalamnya (nominal besar di
+  dashboard, label panjang) meluber keluar kotak. Root cause: agent cuma uji dengan data
+  sample pendek, bukan konten realistis/terpanjang, dan cuma di satu ukuran layar. Solusi:
+  verifikasi UI sekarang wajib pakai konten realistis + cek di minimal 2 lebar layar, plus
+  panduan konkret (truncate, responsive text size) dan pengingat pakai skill `ui-ux-pro-max`
+  untuk komponen data-dense, bukan cuma dipakai di awal lalu lupa.
 
 ## Open questions
 
