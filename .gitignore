@@ -1,0 +1,13 @@
+# OS / editor junk
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Secrets — never commit
+.env
+.env.*
+!.env.example
+
+# Tambahkan entri spesifik stack (node_modules/, dist/, __pycache__/, dst.)
+# di sini setelah stack teknis diputuskan.
