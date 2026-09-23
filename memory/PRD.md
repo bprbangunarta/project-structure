@@ -54,5 +54,7 @@ disiapkan dari awal (memory, backlog, alur kerja per-task, skill yang relevan).
 
 ## Next steps
 
-- Saat mulai project nyata pertama dari template ini: konfirmasi stack (default atau ganti),
-  lalu isi AGENTS.md bagian 4 (overview) dan 10 (stack) sesuai jawabannya.
+- Saat mulai project nyata pertama dari template ini: konfirmasi **stack** (default FastAPI+React
+  atau ganti) DAN konfirmasi **konteks produk** (asumsi saat ini: internal admin dashboard —
+  lihat AGENTS.md bagian 9), lalu isi AGENTS.md bagian 4 (overview) dan 10 (stack) sesuai
+  jawabannya.

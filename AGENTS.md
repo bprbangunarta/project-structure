@@ -6,11 +6,13 @@ Ini adalah sumber kebenaran utama untuk konteks project, struktur, dan cara paka
 
 ## 1. Status project
 
-**Fase: eksplorasi.** Belum ada keputusan produk atau stack yang final. Jangan berasumsi
-teknologi tertentu (framework, database, dsb.) kecuali sudah ditulis eksplisit di bagian
-"Stack teknis" di bawah atau di `memory/PRD.md`. Kalau instruksi user menyiratkan stack baru,
-update kedua file ini setelah keputusan itu dibuat — jangan biarkan keputusan hanya hidup di
-riwayat chat.
+**Fase: template.** Repo ini adalah kerangka awal untuk project baru, bukan produk final.
+Bagian 10 sudah punya stack *default* (FastAPI + React) dan bagian 9 punya asumsi konteks
+produk (internal admin dashboard) — tapi keduanya cuma default/asumsi kerja yang WAJIB
+dikonfirmasi ulang ke user begitu template ini dipakai untuk project nyata (lihat instruksi
+konfirmasi di bagian 9 & 10). Jangan anggap default itu keputusan final tanpa konfirmasi.
+Begitu dikonfirmasi (dipakai apa adanya atau diganti), catat di `memory/PRD.md` — jangan
+biarkan keputusan hanya hidup di riwayat chat.
 
 ## 2. Standar kualitas: production, bukan prototipe
 
@@ -158,11 +160,14 @@ update lewat mekanisme skills.sh supaya `skills-lock.json` tetap akurat.
 | `ui-ux-pro-max` | Saat mengerjakan struktur UI, komponen, design system, aksesibilitas, interaksi, responsive layout — referensi cepat untuk style/palette/font-pairing/ikon/chart. |
 | `web-design-guidelines` | Saat diminta review UI/aksesibilitas/UX terhadap best practice (mis. "review UI ini", "audit accessibility"). |
 
-**Konteks produk: internal admin dashboard, bukan landing page/marketing site.** Prioritaskan
-konsistensi, kejelasan informasi, dan pola UI yang familiar (tabel data, form, navigasi admin)
-di atas eksplorasi estetika/brand identity. `frontend-design` (skill untuk distinctive visual
-identity ala studio desain) sudah dilepas karena cocoknya untuk produk client-facing, bukan
-tooling internal — jangan pasang lagi kecuali scope produk berubah jadi client-facing.
+**Asumsi konteks produk saat ini: internal admin dashboard, bukan landing page/marketing
+site.** Ini asumsi kerja dari percakapan waktu template ini disusun — SAMA seperti stack di
+bagian 10, ini WAJIB dikonfirmasi ulang ke user di awal tiap project baru, bukan otomatis
+diwariskan. Kalau dikonfirmasi tetap internal tool: prioritaskan konsistensi, kejelasan
+informasi, dan pola UI yang familiar (tabel data, form, navigasi admin) di atas eksplorasi
+estetika/brand identity — skill `frontend-design` (distinctive visual identity ala studio
+desain) sudah dilepas karena cocoknya untuk produk client-facing, jangan pasang lagi kecuali
+konfirmasi user mengubah konteks ini jadi client-facing.
 
 Skill set saat ini fokus ke UI/UX dashboard. Begitu stack backend ditentukan, evaluasi apakah
 perlu menambah skill yang relevan (API design, database, testing framework spesifik stack
