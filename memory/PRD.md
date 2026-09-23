@@ -1,7 +1,7 @@
 # PRD / Project Memory
 
 > File ini adalah memory persisten lintas sesi. Protokol baca/update ada di
-> [AGENTS.md](../AGENTS.md) bagian 4. Update file ini setiap ada keputusan atau
+> [AGENTS.md](../AGENTS.md) bagian 6. Update file ini setiap ada keputusan atau
 > progress baru — jangan biarkan informasi penting hanya hidup di riwayat chat.
 
 ## Status saat ini
@@ -20,20 +20,24 @@ disiapkan dari awal (memory, backlog, alur kerja per-task, skill yang relevan).
 
 - **[2026-09-23] Stack default: FastAPI (backend) + React (frontend)** — dipilih sebagai
   default template, tapi HARUS dikonfirmasi ulang ke user di awal tiap project baru (lihat
-  AGENTS.md bagian 8). Jangan anggap ini final tanpa konfirmasi eksplisit.
+  AGENTS.md bagian 10). Jangan anggap ini final tanpa konfirmasi eksplisit.
 - **[2026-09-23] Skill `frontend-design` dilepas** — cocoknya untuk produk client-facing
   (landing page/marketing site), bukan tooling internal. Dipertahankan: `ui-ux-pro-max`,
   `web-design-guidelines`.
 - **[2026-09-23] Struktur folder `backend/`/`frontend/` dipisah di root** — untuk fleksibilitas
   containerization (Docker) per-service. Catatan: kalau stack akhir yang dipilih adalah
   framework full-stack opinionated (Next.js, Laravel, dst.), konvensi framework itu yang
-  menang, bukan split ini (lihat AGENTS.md bagian 8).
-
+  menang, bukan split ini (lihat AGENTS.md bagian 10).
 - **[2026-09-23] Standar kualitas: production-ready, bukan prototipe** — semua project dari
   template ini harus dianggap production-ready sejak awal (lihat AGENTS.md bagian 2): tidak
   boleh ada mock/stub diam-diam, tidak boleh bypass test/lint, wajib validasi & error handling
   di boundary, tidak hardcode secret, migration untuk perubahan skema DB, dan jalan pintas/
   technical debt harus dikomunikasikan + dicatat di sini, bukan didiamkan.
+- **[2026-09-23] Aturan menangani referensi (gambar/kode/situs lain)** — referensi cuma
+  diadopsi untuk aspek spesifik yang diminta, bukan lisensi untuk override aturan project
+  (lihat AGENTS.md bagian 3). Ini merespons pengalaman berulang: agent ditunjukkan referensi
+  (mis. screenshot UI) lalu mencontek 100% dan lupa aturan project yang sudah ditulis. Kalau
+  referensi bentrok sama aturan tertulis, wajib stop dan tanya user, bukan diam-diam milih.
 
 ## Open questions
 
@@ -44,4 +48,4 @@ disiapkan dari awal (memory, backlog, alur kerja per-task, skill yang relevan).
 ## Next steps
 
 - Saat mulai project nyata pertama dari template ini: konfirmasi stack (default atau ganti),
-  lalu isi AGENTS.md bagian 2 (overview) dan 8 (stack) sesuai jawabannya.
+  lalu isi AGENTS.md bagian 4 (overview) dan 10 (stack) sesuai jawabannya.

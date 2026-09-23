@@ -33,27 +33,51 @@ dan aturan di bawah, aturan di bawah yang menang:
 - **Perubahan skema database lewat migration file**, bukan edit manual/ad-hoc ke database.
 - **Pilih dependency yang maintained**, hindari package abandoned/deprecated untuk hal krusial,
   dan jangan nambah dependency berat untuk kebutuhan yang bisa diselesaikan dengan sedikit kode.
-- **Definition of done = benar-benar diverifikasi** (lihat bagian 7, langkah 3) — kode yang
+- **Definition of done = benar-benar diverifikasi** (lihat bagian 8, langkah 3) — kode yang
   "kelihatannya benar" tapi belum dijalankan/ditest bukan selesai.
 - Kalau demi deadline terpaksa ambil jalan pintas/technical debt, itu harus **keputusan sadar
   yang dikomunikasikan ke user dan dicatat di `memory/PRD.md`** — bukan diam-diam dilakukan
   lalu dilupakan.
 
-## 3. Project overview
+## 3. Menangani referensi (gambar, contoh kode, situs lain)
+
+**Masalah yang sering terjadi:** dikasih referensi (screenshot UI, link produk lain, snippet
+kode dari luar), lalu referensi itu dicontek 100% — termasuk hal-hal yang sebenarnya harus
+tetap ikut aturan project ini (bagian 2, 9, 11). Referensi itu sinyal yang konkret dan
+langsung kelihatan, jadi gampang mengalahkan aturan tertulis yang abstrak kalau tidak
+disadari secara eksplisit. Jangan biarkan ini terjadi:
+
+- **Referensi hanya untuk aspek spesifik yang diminta, bukan lisensi untuk override semua
+  aturan project.** Sebelum implementasi, sebutkan eksplisit ke user: bagian mana dari
+  referensi yang mau diadopsi (mis. "layout grid dan struktur navigasinya") dan bagian mana
+  yang tetap ikut aturan project ini, bukan ikut referensi (mis. palet warna/tone tetap
+  konsisten dengan produk existing, bukan asal contek dari referensi kalau konteksnya beda —
+  lihat catatan skill di bagian 9 soal internal admin dashboard vs landing page).
+- **Kalau referensi bentrok dengan aturan tertulis di file ini** (mis. referensi gayanya
+  landing page yang flashy, padahal produk ini internal dashboard yang harus konsisten), STOP
+  dan tanya user secara eksplisit mana yang menang — jangan diam-diam pilih salah satu.
+- **Referensi kode dari luar (StackOverflow, repo lain, AI tool lain) sama perlakuannya:**
+  ambil pola/solusi teknisnya, tapi saring lewat konvensi kode di bagian 11 — jangan copy-paste
+  gaya penulisan asing yang beda konvensi dari project ini.
+- Ini berlaku juga untuk langkah 1 ("Pahami maksud") di alur kerja per-task (bagian 8) — bagian
+  dari "memahami maksud" adalah memisahkan mana permintaan eksplisit user dan mana yang cuma
+  ikut-ikutan referensi tanpa disadari.
+
+## 4. Project overview
 
 <!-- TODO: isi begitu ada kejelasan produk -->
 - **Apa yang dibangun:** belum ditentukan
 - **Untuk siapa:** belum ditentukan
 - **Masalah yang diselesaikan:** belum ditentukan
 
-## 4. Struktur repo
+## 5. Struktur repo
 
 ```
 .
 ├── AGENTS.md           # file ini — instruksi utama untuk agent
 ├── CLAUDE.md            # pointer ke AGENTS.md, jangan diisi konten lain
 ├── memory/
-│   └── PRD.md            # memory persisten lintas sesi — lihat bagian 5
+│   └── PRD.md            # memory persisten lintas sesi — lihat bagian 6
 ├── backend/              # service backend (API, worker, dsb.)
 ├── frontend/             # aplikasi frontend (web/mobile)
 ├── .agents/skills/        # skill yang di-install lewat skills.sh
@@ -70,7 +94,7 @@ perlu merombak struktur. Ketika mulai menambah kode:
 - Kalau ternyata project ini jadi monolith murni, folder split ini tetap dipertahankan
   demi konsistensi kecuali user eksplisit minta digabung.
 
-## 5. Memory persisten (`memory/PRD.md`)
+## 6. Memory persisten (`memory/PRD.md`)
 
 **Penting:** Claude Code tidak otomatis membaca file selain `CLAUDE.md`/`AGENTS.md` di awal
 sesi. Supaya `memory/PRD.md` benar-benar berfungsi sebagai memory lintas percakapan, agent
@@ -87,14 +111,14 @@ HARUS mengikuti protokol ini secara eksplisit:
   (AGENTS.md) atau cukup dibaca dari kode saat dibutuhkan. PRD.md untuk konteks yang
   *tidak* tersirat dari kode.
 
-## 6. Backlog / inbox (`memory/backlog.md`)
+## 7. Backlog / inbox (`memory/backlog.md`)
 
 Tempat nampung ide/catatan mentah sebelum jadi task yang jelas (versi ringan dari pola
 inbox-processing, tanpa infrastruktur multi-agent/worktree yang belum dibutuhkan di fase
 ini). Saat diminta triage, pecah entri di `memory/backlog.md` jadi task jelas, pindahkan ke
 `memory/PRD.md` ("Next steps" atau "Keputusan yang sudah diambil"), lalu hapus dari backlog.
 
-## 7. Alur kerja per-task
+## 8. Alur kerja per-task
 
 Sebelum menganggap sebuah task/perubahan selesai, ikuti urutan ini (disiplin dasar, bukan
 pipeline otomatis — cukup jalankan langkah-langkahnya secara sadar):
@@ -107,9 +131,9 @@ pipeline otomatis — cukup jalankan langkah-langkahnya secara sadar):
 4. **Laporkan** — ringkas apa yang berubah dan langkah berikutnya, jangan diam-diam
    menganggap selesai tanpa verifikasi di atas.
 5. **Catat kalau perlu** — kalau task ini mengandung keputusan penting (bukan cuma detail
-   implementasi), update `memory/PRD.md` sesuai bagian 5.
+   implementasi), update `memory/PRD.md` sesuai bagian 6.
 
-## 8. Skill yang terpasang (`.agents/skills/`, lihat `skills-lock.json`)
+## 9. Skill yang terpasang (`.agents/skills/`, lihat `skills-lock.json`)
 
 Skill di-manage lewat [skills.sh](https://www.skills.sh/) — jangan edit isinya manual,
 update lewat mekanisme skills.sh supaya `skills-lock.json` tetap akurat.
@@ -129,7 +153,7 @@ Skill set saat ini fokus ke UI/UX dashboard. Begitu stack backend ditentukan, ev
 perlu menambah skill yang relevan (API design, database, testing framework spesifik stack
 tersebut) lewat skills.sh, dan catat di tabel ini.
 
-## 9. Stack teknis
+## 10. Stack teknis
 
 **Default: FastAPI (backend) + React (frontend).** Ini bukan keputusan final otomatis —
 di awal setiap project/fitur baru yang dimulai dari template ini, agent WAJIB bertanya ke
@@ -143,14 +167,14 @@ lalu update baris di bawah ini kalau override.
 - Database: belum ditentukan
 - Deployment/Docker: belum ditentukan
 
-**Catatan soal struktur folder (lihat bagian 4):** FastAPI + React secara alami cocok dengan
+**Catatan soal struktur folder (lihat bagian 5):** FastAPI + React secara alami cocok dengan
 split `backend/`/`frontend/` yang sudah ada (dua service independen, dua container). Tapi
 kalau user memilih stack full-stack opinionated (mis. Next.js App Router, Laravel, Django
 dengan template server-side) yang punya struktur folder sendiri, **konvensi framework itu
 yang menang** — jangan paksa masuk ke split `backend/`/`frontend/` generik ini kalau
-bertentangan. Diskusikan dan update bagian 4 kalau itu terjadi.
+bertentangan. Diskusikan dan update bagian 5 kalau itu terjadi.
 
-## 10. Konvensi umum
+## 11. Konvensi umum
 
 Formatting dasar (indentasi, line ending, trailing whitespace) di-enforce lewat
 `.editorconfig` — jangan menyimpang dari situ. Aturan berikut berlaku lintas stack apa pun
@@ -167,7 +191,7 @@ yang akhirnya dipilih:
 - **Jangan menambah validasi/fallback untuk skenario yang tidak mungkin terjadi.** Percaya
   pada guarantee internal; validasi hanya di boundary (input user, API eksternal).
 - Konvensi file/folder, linter, formatter, dan testing framework spesifik-stack ditambahkan
-  di sini setelah bagian 9 (Stack teknis) diisi — jangan biarkan bagian ini kosong lagi
+  di sini setelah bagian 10 (Stack teknis) diisi — jangan biarkan bagian ini kosong lagi
   begitu stack final.
 
 <!-- TODO: setelah stack dipilih — tambahkan linter/formatter, testing convention,
