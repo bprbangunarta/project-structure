@@ -29,6 +29,12 @@ disiapkan dari awal (memory, backlog, alur kerja per-task, skill yang relevan).
   framework full-stack opinionated (Next.js, Laravel, dst.), konvensi framework itu yang
   menang, bukan split ini (lihat AGENTS.md bagian 8).
 
+- **[2026-09-23] Standar kualitas: production-ready, bukan prototipe** — semua project dari
+  template ini harus dianggap production-ready sejak awal (lihat AGENTS.md bagian 2): tidak
+  boleh ada mock/stub diam-diam, tidak boleh bypass test/lint, wajib validasi & error handling
+  di boundary, tidak hardcode secret, migration untuk perubahan skema DB, dan jalan pintas/
+  technical debt harus dikomunikasikan + dicatat di sini, bukan didiamkan.
+
 ## Open questions
 
 - Produk konkret apa yang akan dibangun pertama kali pakai template ini?

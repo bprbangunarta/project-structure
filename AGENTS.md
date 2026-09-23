@@ -12,21 +12,48 @@ teknologi tertentu (framework, database, dsb.) kecuali sudah ditulis eksplisit d
 update kedua file ini setelah keputusan itu dibuat — jangan biarkan keputusan hanya hidup di
 riwayat chat.
 
-## 2. Project overview
+## 2. Standar kualitas: production, bukan prototipe
+
+**Project yang dibangun dari template ini production-ready, bukan demo/POC sekali pakai.**
+Ini mengubah default behavior di beberapa titik — kalau ada konflik antara "cepat selesai"
+dan aturan di bawah, aturan di bawah yang menang:
+
+- **Jangan tinggalkan mock/stub/placeholder secara diam-diam.** Kalau terpaksa nunda sesuatu
+  (integrasi belum siap, keputusan belum final), tandai eksplisit (`# TODO: ...` dengan alasan)
+  DAN sebutkan ke user di laporan — jangan biarkan mereka ngira itu implementasi asli.
+- **Jangan bypass gate demi cepat selesai**: tidak `--no-verify`, tidak disable lint rule/type
+  check tanpa alasan tertulis, tidak `except: pass` atau catch-and-swallow error diam-diam.
+  Kalau ada check yang gagal, perbaiki root cause-nya.
+- **Validasi & error handling di boundary itu wajib, bukan opsional** — semua input dari user
+  atau API eksternal divalidasi; error dikembalikan dengan pesan/status yang jelas (bukan
+  stack trace mentah bocor ke response), dan dicatat lewat logging yang berguna untuk debug
+  production nanti (bukan `print`/`console.log` tercecer).
+- **Jangan hardcode secret, credential, atau URL environment-spesifik.** Semua lewat env var;
+  `.env.example` harus selalu sinkron dengan variabel yang benar-benar dipakai kode.
+- **Perubahan skema database lewat migration file**, bukan edit manual/ad-hoc ke database.
+- **Pilih dependency yang maintained**, hindari package abandoned/deprecated untuk hal krusial,
+  dan jangan nambah dependency berat untuk kebutuhan yang bisa diselesaikan dengan sedikit kode.
+- **Definition of done = benar-benar diverifikasi** (lihat bagian 7, langkah 3) — kode yang
+  "kelihatannya benar" tapi belum dijalankan/ditest bukan selesai.
+- Kalau demi deadline terpaksa ambil jalan pintas/technical debt, itu harus **keputusan sadar
+  yang dikomunikasikan ke user dan dicatat di `memory/PRD.md`** — bukan diam-diam dilakukan
+  lalu dilupakan.
+
+## 3. Project overview
 
 <!-- TODO: isi begitu ada kejelasan produk -->
 - **Apa yang dibangun:** belum ditentukan
 - **Untuk siapa:** belum ditentukan
 - **Masalah yang diselesaikan:** belum ditentukan
 
-## 3. Struktur repo
+## 4. Struktur repo
 
 ```
 .
 ├── AGENTS.md           # file ini — instruksi utama untuk agent
 ├── CLAUDE.md            # pointer ke AGENTS.md, jangan diisi konten lain
 ├── memory/
-│   └── PRD.md            # memory persisten lintas sesi — lihat bagian 4
+│   └── PRD.md            # memory persisten lintas sesi — lihat bagian 5
 ├── backend/              # service backend (API, worker, dsb.)
 ├── frontend/             # aplikasi frontend (web/mobile)
 ├── .agents/skills/        # skill yang di-install lewat skills.sh
@@ -43,7 +70,7 @@ perlu merombak struktur. Ketika mulai menambah kode:
 - Kalau ternyata project ini jadi monolith murni, folder split ini tetap dipertahankan
   demi konsistensi kecuali user eksplisit minta digabung.
 
-## 4. Memory persisten (`memory/PRD.md`)
+## 5. Memory persisten (`memory/PRD.md`)
 
 **Penting:** Claude Code tidak otomatis membaca file selain `CLAUDE.md`/`AGENTS.md` di awal
 sesi. Supaya `memory/PRD.md` benar-benar berfungsi sebagai memory lintas percakapan, agent
@@ -60,14 +87,14 @@ HARUS mengikuti protokol ini secara eksplisit:
   (AGENTS.md) atau cukup dibaca dari kode saat dibutuhkan. PRD.md untuk konteks yang
   *tidak* tersirat dari kode.
 
-## 5. Backlog / inbox (`memory/backlog.md`)
+## 6. Backlog / inbox (`memory/backlog.md`)
 
 Tempat nampung ide/catatan mentah sebelum jadi task yang jelas (versi ringan dari pola
 inbox-processing, tanpa infrastruktur multi-agent/worktree yang belum dibutuhkan di fase
 ini). Saat diminta triage, pecah entri di `memory/backlog.md` jadi task jelas, pindahkan ke
 `memory/PRD.md` ("Next steps" atau "Keputusan yang sudah diambil"), lalu hapus dari backlog.
 
-## 6. Alur kerja per-task
+## 7. Alur kerja per-task
 
 Sebelum menganggap sebuah task/perubahan selesai, ikuti urutan ini (disiplin dasar, bukan
 pipeline otomatis — cukup jalankan langkah-langkahnya secara sadar):
@@ -80,9 +107,9 @@ pipeline otomatis — cukup jalankan langkah-langkahnya secara sadar):
 4. **Laporkan** — ringkas apa yang berubah dan langkah berikutnya, jangan diam-diam
    menganggap selesai tanpa verifikasi di atas.
 5. **Catat kalau perlu** — kalau task ini mengandung keputusan penting (bukan cuma detail
-   implementasi), update `memory/PRD.md` sesuai bagian 4.
+   implementasi), update `memory/PRD.md` sesuai bagian 5.
 
-## 7. Skill yang terpasang (`.agents/skills/`, lihat `skills-lock.json`)
+## 8. Skill yang terpasang (`.agents/skills/`, lihat `skills-lock.json`)
 
 Skill di-manage lewat [skills.sh](https://www.skills.sh/) — jangan edit isinya manual,
 update lewat mekanisme skills.sh supaya `skills-lock.json` tetap akurat.
@@ -102,7 +129,7 @@ Skill set saat ini fokus ke UI/UX dashboard. Begitu stack backend ditentukan, ev
 perlu menambah skill yang relevan (API design, database, testing framework spesifik stack
 tersebut) lewat skills.sh, dan catat di tabel ini.
 
-## 8. Stack teknis
+## 9. Stack teknis
 
 **Default: FastAPI (backend) + React (frontend).** Ini bukan keputusan final otomatis —
 di awal setiap project/fitur baru yang dimulai dari template ini, agent WAJIB bertanya ke
@@ -116,14 +143,14 @@ lalu update baris di bawah ini kalau override.
 - Database: belum ditentukan
 - Deployment/Docker: belum ditentukan
 
-**Catatan soal struktur folder (lihat bagian 3):** FastAPI + React secara alami cocok dengan
+**Catatan soal struktur folder (lihat bagian 4):** FastAPI + React secara alami cocok dengan
 split `backend/`/`frontend/` yang sudah ada (dua service independen, dua container). Tapi
 kalau user memilih stack full-stack opinionated (mis. Next.js App Router, Laravel, Django
 dengan template server-side) yang punya struktur folder sendiri, **konvensi framework itu
 yang menang** — jangan paksa masuk ke split `backend/`/`frontend/` generik ini kalau
-bertentangan. Diskusikan dan update bagian 3 kalau itu terjadi.
+bertentangan. Diskusikan dan update bagian 4 kalau itu terjadi.
 
-## 9. Konvensi umum
+## 10. Konvensi umum
 
 Formatting dasar (indentasi, line ending, trailing whitespace) di-enforce lewat
 `.editorconfig` — jangan menyimpang dari situ. Aturan berikut berlaku lintas stack apa pun
@@ -140,7 +167,7 @@ yang akhirnya dipilih:
 - **Jangan menambah validasi/fallback untuk skenario yang tidak mungkin terjadi.** Percaya
   pada guarantee internal; validasi hanya di boundary (input user, API eksternal).
 - Konvensi file/folder, linter, formatter, dan testing framework spesifik-stack ditambahkan
-  di sini setelah bagian 8 (Stack teknis) diisi — jangan biarkan bagian ini kosong lagi
+  di sini setelah bagian 9 (Stack teknis) diisi — jangan biarkan bagian ini kosong lagi
   begitu stack final.
 
 <!-- TODO: setelah stack dipilih — tambahkan linter/formatter, testing convention,
