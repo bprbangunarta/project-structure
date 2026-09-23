@@ -3,9 +3,11 @@
 Template/kerangka standar untuk memulai project baru dengan konvensi yang ramah
 AI coding agent (Claude Code, dll.) sejak awal — bukan produk itu sendiri.
 
-Cara pakai: clone/copy repo ini sebagai titik awal project baru, lalu di sesi
-pertama minta agent konfirmasi stack (default: FastAPI + React) dan isi konteks
-produknya.
+Cara pakai: klik **"Use this template"** di halaman GitHub repo ini untuk bikin repo
+project baru (dapat riwayat git bersih, bukan bawa-bawa history template ini). Lalu
+di sesi pertama, minta agent baca `memory/PRD.md`, konfirmasi stack (default: FastAPI
++ React) dan konteks produk (default: internal admin dashboard), dan isi konteks
+produknya — lihat AGENTS.md bagian 1, 3, 8, 9.
 
 ## Peta dokumen
 
