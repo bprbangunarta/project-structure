@@ -113,23 +113,22 @@ yang akhirnya dipilih:
   **Teks yang tampil ke user (label UI, pesan error, dokumentasi)** boleh dan sebaiknya tetap
   Bahasa Indonesia — aturan ini cuma untuk identifier teknis di kode/schema, bukan konten
   user-facing.
-- **Formatter wajib jalan sebelum baris kode pertama ditulis, bukan "nanti aja".** Template
-  ini sudah nyiapkan starter config untuk default stack (AGENTS.md bagian 9):
-  - Frontend (React/JS-TS): [.prettierrc.json](../../.prettierrc.json) +
-    [.prettierignore](../../.prettierignore) di root — jalankan `prettier --write` (idealnya
-    lewat pre-commit hook atau format-on-save) supaya style nggak tercampur antar file/sesi.
-  - Backend (FastAPI/Python): [backend/pyproject.toml](../../backend/pyproject.toml) sudah ada
-    section `[tool.ruff]` — jalankan `ruff format` + `ruff check`. Begitu backend project
-    sungguhan di-scaffold, gabungkan section ini ke `pyproject.toml` final, jangan dua file
-    terpisah.
-  - **Kalau stack yang dikonfirmasi user BEDA dari default** (mis. Next.js — Prettier config
-    di atas masih relevan karena tetap ekosistem JS/TS; tapi kalau pindah ke Vue/Svelte/PHP
-    Laravel/dst., formatter/linter-nya beda) — sesuaikan config yang relevan, hapus yang tidak
-    terpakai, dan catat di `memory/PRD.md`. Jangan biarkan config basi nempel di repo kalau
-    stack-nya sudah pindah.
+- **Formatter wajib disiapkan & dijalankan sebelum baris kode pertama ditulis, bukan "nanti
+  aja".** Template ini SENGAJA tidak menyertakan file config formatter dari awal (biar nggak
+  ada config basi nempel di repo kalau stack akhirnya beda dari default) — begitu stack
+  dikonfirmasi ke user (bagian 9), agent wajib setup formatter yang sesuai SEBELUM menulis kode
+  pertama:
+  - Ekosistem JS/TS (React, Next.js, Vue, dst.): Prettier (`.prettierrc`) + linter yang sesuai
+    framework-nya (ESLint, dst.), jalankan `prettier --write` konsisten.
+  - Python (FastAPI, Django, dst.): Ruff (format + lint sekaligus) di `pyproject.toml`.
+  - Stack lain: pakai formatter standar ekosistemnya (mis. Laravel Pint untuk PHP) — jangan
+    biarkan project jalan tanpa formatter cuma karena stack-nya di luar default template ini.
+  - Begitu formatter dipilih & disetup, catat di `memory/PRD.md` dan update bagian ini
+    (Konvensi penulisan kode) dengan aturan konkretnya, supaya sesi berikutnya nggak setup
+    ulang dari nol atau pakai config yang beda-beda tiap sesi.
 - Konvensi file/folder, testing framework, dan commit message style spesifik-stack ditambahkan
   di sini setelah AGENTS.md bagian 9 (Stack teknis) diisi — jangan biarkan bagian ini kosong
   lagi begitu stack final.
 
-<!-- TODO: setelah stack dipilih — tambahkan testing convention, struktur folder per
-     fitur/module, dan commit message style di sini. -->
+<!-- TODO: setelah stack dipilih — tambahkan setup formatter konkret, testing convention,
+     struktur folder per fitur/module, dan commit message style di sini. -->

@@ -25,13 +25,13 @@ produknya — lihat AGENTS.md bagian 1, 3, 8, 9.
 ## Struktur
 
 ```
-backend/    # service backend (default: FastAPI) — sudah ada starter config Ruff
-frontend/   # aplikasi frontend (default: React) — format pakai Prettier (config di root)
+backend/    # service backend (default: FastAPI)
+frontend/   # aplikasi frontend (default: React)
 memory/     # PRD + backlog, lihat di atas
 ```
 
-Formatter default sudah disiapkan: `.prettierrc.json`/`.prettierignore` (JS/TS) dan
-`backend/pyproject.toml` (Python/Ruff) — sesuaikan/ganti kalau stack final beda dari
-default, lihat `docs/agents/code-standards.md`.
+Formatter (Prettier/Ruff/dst.) belum di-setup di template ini secara sengaja — agent wajib
+setup begitu stack dikonfirmasi, sebelum kode pertama ditulis. Lihat
+`docs/agents/code-standards.md`.
 
 Detail lengkap dan alasan tiap keputusan ada di `AGENTS.md`.
