@@ -9,8 +9,11 @@ produknya.
 
 ## Peta dokumen
 
-- [AGENTS.md](AGENTS.md) — instruksi utama untuk AI agent: struktur, konvensi,
-  protokol memory, skill yang terpasang. Baca ini duluan.
+- [AGENTS.md](AGENTS.md) — index instruksi utama untuk AI agent: status, struktur,
+  alur kerja, skill, stack. Baca ini duluan.
+- `docs/agents/` — panduan detail yang dirujuk dari AGENTS.md: standar kode/kualitas
+  ([code-standards.md](docs/agents/code-standards.md)) dan cara menangani referensi
+  eksternal ([handling-references.md](docs/agents/handling-references.md)).
 - [memory/PRD.md](memory/PRD.md) — status project, keputusan yang sudah diambil,
   dan rencana berikutnya. Persisten lintas sesi.
 - [memory/backlog.md](memory/backlog.md) — catatan/ide mentah sebelum jadi task.
