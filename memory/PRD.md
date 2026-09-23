@@ -55,6 +55,17 @@ disiapkan dari awal (memory, backlog, alur kerja per-task, skill yang relevan).
   auto-load, jadi instruksi rujukan itu wajib tetap ada dan jangan dihapus saat AGENTS.md
   diedit lagi nanti. Repo GitHub juga dijadikan "Template repository" supaya instantiate
   project baru pakai "Use this template" (riwayat git bersih), bukan clone manual.
+- **[2026-09-23] Database wajib ikut dikonfirmasi ke user, bukan dipilih sendiri oleh agent**
+  (lihat AGENTS.md bagian 9) — ditemukan dari pengujian nyata (sesi agent baru, project
+  monitoring kredit): agent tanya stack backend/frontend tapi langsung pilih database sendiri
+  tanpa konfirmasi. "Database: belum ditentukan" sekarang eksplisit berarti wajib ditanyakan
+  dulu, bukan bebas diputuskan sendiri.
+- **[2026-09-23] Naming convention database default `snake_case`, konsisten untuk seluruh
+  schema** (lihat `docs/agents/code-standards.md`) — ditemukan dari pengujian yang sama:
+  penamaan tabel/kolom campur `snake_case` dan `camelCase`, bukan cuma masalah rapi tapi bisa
+  jadi bug nyata (case-folding identifier di PostgreSQL/MySQL). Dikonfirmasi sekali di awal
+  project bareng pertanyaan Database, lalu dipatuhi konsisten — layer API/JSON di atasnya
+  boleh beda konvensi asal lewat mapping eksplisit, bukan bikin kolom DB ikut campur.
 
 ## Open questions
 

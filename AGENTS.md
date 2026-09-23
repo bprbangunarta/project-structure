@@ -136,14 +136,18 @@ tersebut) lewat skills.sh, dan catat di tabel ini.
 
 **Default: FastAPI (backend) + React (frontend).** Ini bukan keputusan final otomatis —
 di awal setiap project/fitur baru yang dimulai dari template ini, agent WAJIB bertanya ke
-user dulu: pakai default ini, atau ganti stack lain? Jangan langsung asumsikan default tanpa
-konfirmasi, walaupun ini yang tertulis di sini. Begitu user menjawab, catat hasilnya (default
-dikonfirmasi, atau stack lain dipilih) di `memory/PRD.md` bagian "Keputusan yang sudah diambil",
-lalu update baris di bawah ini kalau override.
+user dulu untuk **setiap** baris di bawah (backend, frontend, database, deployment) — pakai
+default/rekomendasi, atau ganti? **Jangan pernah memilih sendiri lalu langsung pakai tanpa
+konfirmasi**, termasuk database — "belum ditentukan" bukan berarti agent bebas putuskan
+sendiri, itu artinya wajib ditanyakan dulu ke user sebelum schema/migration pertama dibuat.
+Begitu user menjawab, catat hasilnya di `memory/PRD.md` bagian "Keputusan yang sudah diambil",
+lalu update baris di bawah ini.
 
 - Backend: FastAPI (default, perlu dikonfirmasi ulang tiap project baru)
 - Frontend: React (default, perlu dikonfirmasi ulang tiap project baru)
-- Database: belum ditentukan
+- Database: belum ditentukan — **wajib ditanyakan ke user** sebelum bikin schema/migration
+  pertama; jangan diam-diam pilih sendiri (mis. auto pilih PostgreSQL/SQLite) walau itu pilihan
+  yang masuk akal. Boleh kasih rekomendasi dengan alasannya, tapi keputusan akhir tetap user.
 - Deployment/Docker: belum ditentukan
 
 **Catatan soal struktur folder (lihat bagian 4):** FastAPI + React secara alami cocok dengan

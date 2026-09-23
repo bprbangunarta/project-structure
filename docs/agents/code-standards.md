@@ -63,6 +63,18 @@ yang akhirnya dipilih:
 - **Jangan tinggalkan dead code**, kode yang di-comment-out, atau implementasi setengah jadi.
 - **Jangan menambah validasi/fallback untuk skenario yang tidak mungkin terjadi.** Percaya
   pada guarantee internal; validasi hanya di boundary (input user, API eksternal).
+- **Naming convention database (tabel & kolom) wajib satu jenis, jangan campur.** Ini bukan
+  cuma soal rapi — nama tabel/kolom yang campur `snake_case` dan `camelCase` di database SQL
+  itu sumber bug nyata: identifier tanpa quote di PostgreSQL/MySQL otomatis di-lowercase, jadi
+  `namaLengkap` dan `namalengkap` bisa dianggap sama atau malah bentrok tanpa error yang jelas
+  — persis gejala "hasilnya nggak jelas" yang sering muncul kalau ini didiamkan. **Default:
+  `snake_case` untuk semua nama tabel & kolom** (standar SQL, aman dari masalah case-folding
+  itu). Konfirmasi sekali ke user di awal project (bareng pertanyaan Database di AGENTS.md
+  bagian 9) — kalau user tidak keberatan, pakai default ini tanpa nanya ulang tiap bikin tabel
+  baru. Begitu dikonfirmasi, terapkan konsisten ke SELURUH schema, tidak boleh campur di
+  tengah jalan. Layer di atasnya (JSON response API, misalnya) boleh beda konvensi (mis.
+  `camelCase` sesuai kebiasaan JS/JSON) — itu urusan mapping di serialization layer (Pydantic
+  alias, dsb.), bukan alasan untuk bikin nama kolom database sendiri ikut campur.
 - Konvensi file/folder, linter, formatter, dan testing framework spesifik-stack ditambahkan
   di sini setelah AGENTS.md bagian 9 (Stack teknis) diisi — jangan biarkan bagian ini kosong
   lagi begitu stack final.
