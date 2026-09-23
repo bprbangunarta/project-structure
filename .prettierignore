@@ -1,0 +1,14 @@
+# Build output & dependencies
+node_modules/
+dist/
+build/
+.next/
+out/
+
+# Vendored skill files — bukan kode project, jangan diformat ulang
+.agents/skills/
+
+# Lockfiles — biar package manager yang jaga formatnya
+package-lock.json
+pnpm-lock.yaml
+yarn.lock

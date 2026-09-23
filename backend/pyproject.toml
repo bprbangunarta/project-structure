@@ -1,0 +1,13 @@
+# Starter config untuk formatter/linter default stack (FastAPI/Python).
+# Begitu backend project sungguhan di-scaffold (mis. lewat `uv init` / `poetry init`),
+# gabungkan section [tool.ruff] ini ke pyproject.toml final-nya — jangan dua file terpisah.
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.format]
+quote-style = "double"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]

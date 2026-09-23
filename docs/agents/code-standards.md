@@ -113,9 +113,23 @@ yang akhirnya dipilih:
   **Teks yang tampil ke user (label UI, pesan error, dokumentasi)** boleh dan sebaiknya tetap
   Bahasa Indonesia — aturan ini cuma untuk identifier teknis di kode/schema, bukan konten
   user-facing.
-- Konvensi file/folder, linter, formatter, dan testing framework spesifik-stack ditambahkan
+- **Formatter wajib jalan sebelum baris kode pertama ditulis, bukan "nanti aja".** Template
+  ini sudah nyiapkan starter config untuk default stack (AGENTS.md bagian 9):
+  - Frontend (React/JS-TS): [.prettierrc.json](../../.prettierrc.json) +
+    [.prettierignore](../../.prettierignore) di root — jalankan `prettier --write` (idealnya
+    lewat pre-commit hook atau format-on-save) supaya style nggak tercampur antar file/sesi.
+  - Backend (FastAPI/Python): [backend/pyproject.toml](../../backend/pyproject.toml) sudah ada
+    section `[tool.ruff]` — jalankan `ruff format` + `ruff check`. Begitu backend project
+    sungguhan di-scaffold, gabungkan section ini ke `pyproject.toml` final, jangan dua file
+    terpisah.
+  - **Kalau stack yang dikonfirmasi user BEDA dari default** (mis. Next.js — Prettier config
+    di atas masih relevan karena tetap ekosistem JS/TS; tapi kalau pindah ke Vue/Svelte/PHP
+    Laravel/dst., formatter/linter-nya beda) — sesuaikan config yang relevan, hapus yang tidak
+    terpakai, dan catat di `memory/PRD.md`. Jangan biarkan config basi nempel di repo kalau
+    stack-nya sudah pindah.
+- Konvensi file/folder, testing framework, dan commit message style spesifik-stack ditambahkan
   di sini setelah AGENTS.md bagian 9 (Stack teknis) diisi — jangan biarkan bagian ini kosong
   lagi begitu stack final.
 
-<!-- TODO: setelah stack dipilih — tambahkan linter/formatter, testing convention,
-     struktur folder per fitur/module, dan commit message style di sini. -->
+<!-- TODO: setelah stack dipilih — tambahkan testing convention, struktur folder per
+     fitur/module, dan commit message style di sini. -->

@@ -96,6 +96,12 @@ disiapkan dari awal (memory, backlog, alur kerja per-task, skill yang relevan).
   tabel referensi pasif tidak cukup untuk memicu itu. Solusi: alur kerja per-task sekarang
   punya langkah 2 "Cek skill yang relevan" sebagai checklist eksplisit sebelum implement, dan
   langkah "Laporkan" sekarang wajib sebutkan skill apa yang dipanggil (atau kenapa tidak).
+- **[2026-09-23] Formatter default disiapkan di template** (lihat `docs/agents/code-standards.md`)
+  — Prettier (`.prettierrc.json`, `.prettierignore` di root) untuk React/JS-TS, Ruff
+  (`backend/pyproject.toml`) untuk FastAPI/Python, sesuai stack default di bagian 9. Wajib
+  jalan sebelum baris kode pertama, bukan ditunda. Kalau stack final beda dari default (mis.
+  pindah ke Vue/Laravel), config ini harus disesuaikan/diganti, jangan dibiarkan basi nempel
+  di repo — dicatat instruksinya eksplisit di code-standards.md.
 
 ## Open questions
 
