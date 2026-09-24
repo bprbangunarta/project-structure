@@ -3,6 +3,9 @@
 > Dirujuk dari [AGENTS.md](../../AGENTS.md) bagian 5 (Alur kerja per-task), langkah 3
 > (Implement). Baca file ini sebelum menulis/mengubah kode kalau belum dibaca di sesi ini —
 > ini bukan bacaan opsional, ini bagian dari definisi "implement dengan benar".
+>
+> Aturan yang menyebut UI, database, atau API berlaku kalau project memang punya komponen
+> itu (ditentukan saat kickoff, AGENTS.md bagian 1). Sisanya berlaku untuk semua project.
 
 ## Production, bukan prototipe
 
@@ -38,17 +41,20 @@ dan aturan di bawah, aturan di bawah yang menang:
   keyboard numeric untuk field angka, dst. "Validasi backend benar tapi UI masih terima input
   bebas" dianggap belum selesai, bukan boleh diperbaiki nanti. Untuk field dengan pola yang
   berulang di banyak form (nomor telepon, email, NIK, dst.), buat reusable field
-  component/schema yang membungkus validasi + constraint UI sekaligus (lihat AGENTS.md bagian
-  9 untuk saran konkret di stack default), supaya tidak diperbaiki manual satu-satu tiap ada
-  field baru.
-- **Responsivitas layout ≠ responsivitas konten — keduanya wajib dicek terpisah.** Grid/flex
+  component/schema yang membungkus validasi + constraint UI sekaligus, supaya tidak diperbaiki
+  manual satu-satu tiap ada field baru. Contoh di stack FastAPI + React: model Pydantic jadi
+  sumber kebenaran validasi, dan di React tiap tipe field berulang dibungkus komponen seperti
+  `<PhoneNumberInput />` yang sudah membawa `inputMode`/`pattern`/`maxLength`. Prinsipnya sama
+  di stack lain. Berlaku kalau project punya form/UI.
+- **Responsivitas layout ≠ responsivitas konten — keduanya wajib dicek terpisah** (project
+  ber-UI). Grid/flex
   dari component library otomatis menyesuaikan ukuran container, tapi TIDAK otomatis menjamin
   teks/angka di dalamnya muat. Sumber bug yang sering luput: angka besar di stat card (mis.
   "Rp 1.250.000.000") kepotong/meluber, label/nama panjang di tabel bikin kolom melebar tidak
   wajar, heading yang pas di desktop jadi kepanjangan di mobile. Wajib untuk setiap komponen UI
   baru yang menampilkan data dinamis:
   - Uji dengan **konten realistis/terpanjang yang mungkin terjadi**, bukan data sample pendek
-    (mis. nama nasabah terpanjang yang masuk akal, plafon kredit dengan banyak digit) — bukan
+    (mis. nama terpanjang yang masuk akal, nominal dengan banyak digit) — bukan
     "Budi" dan "Rp 100".
   - Cek tampilan di **minimal 2 lebar layar berbeda** (mobile ~375px, desktop) sebelum
     menganggap selesai — bukan cuma di satu ukuran window default.
@@ -58,9 +64,10 @@ dan aturan di bawah, aturan di bawah yang menang:
   - Ukuran teks (angka besar di stat card/dashboard khususnya) pakai unit yang scale wajar
     (mis. Tailwind responsive text classes `text-xl md:text-2xl`, atau `clamp()`), bukan satu
     ukuran fixed besar yang diasumsikan selalu muat.
-  - Skill `ui-ux-pro-max` (lihat AGENTS.md bagian 8) relevan persis untuk kasus ini — pakai
-    saat membangun komponen data-dense (dashboard, tabel, stat card), jangan cuma dipakai untuk
-    styling awal lalu dilupakan pas nambah komponen baru berikutnya.
+  - Untuk komponen data-dense (dashboard, tabel, stat card), skill `ui-ux-pro-max` (lihat
+    AGENTS.md bagian 8) berguna sebagai sumber data (`--domain ux`, `--domain chart`); ikuti
+    rencana pemakaian skill di `memory/PRD.md`, jangan cuma dipakai di awal lalu dilupakan
+    pas nambah komponen baru.
   - **Sebelum melaporkan task UI selesai, jalankan visual review pakai skill `ui-taste`**
     (lihat AGENTS.md bagian 8) — ini bukan opsional untuk task yang menyentuh UI. Tujuannya
     memastikan hasilnya nggak cuma "rapi secara struktur" tapi juga punya perhatian ke detail
@@ -87,42 +94,43 @@ yang akhirnya dipilih:
 - **Jangan tinggalkan dead code**, kode yang di-comment-out, atau implementasi setengah jadi.
 - **Jangan menambah validasi/fallback untuk skenario yang tidak mungkin terjadi.** Percaya
   pada guarantee internal; validasi hanya di boundary (input user, API eksternal).
-- **Naming convention database (tabel & kolom) wajib satu jenis, jangan campur.** Ini bukan
+- **Naming convention database (tabel & kolom) wajib satu jenis, jangan campur** (kalau
+  project memakai database SQL). Ini bukan
   cuma soal rapi — nama tabel/kolom yang campur `snake_case` dan `camelCase` di database SQL
   itu sumber bug nyata: identifier tanpa quote di PostgreSQL/MySQL otomatis di-lowercase, jadi
   `namaLengkap` dan `namalengkap` bisa dianggap sama atau malah bentrok tanpa error yang jelas
   — persis gejala "hasilnya nggak jelas" yang sering muncul kalau ini didiamkan. **Default:
   `snake_case` untuk semua nama tabel & kolom** (standar SQL, aman dari masalah case-folding
-  itu). Konfirmasi sekali ke user di awal project (bareng pertanyaan Database di AGENTS.md
-  bagian 9) — kalau user tidak keberatan, pakai default ini tanpa nanya ulang tiap bikin tabel
+  itu). Konfirmasi sekali ke user di awal project (kickoff, AGENTS.md bagian 1) — kalau user
+  tidak keberatan, pakai default ini tanpa nanya ulang tiap bikin tabel
   baru. Begitu dikonfirmasi, terapkan konsisten ke SELURUH schema, tidak boleh campur di
   tengah jalan. Layer di atasnya (JSON response API, misalnya) boleh beda konvensi (mis.
   `camelCase` sesuai kebiasaan JS/JSON) — itu urusan mapping di serialization layer (Pydantic
   alias, dsb.), bukan alasan untuk bikin nama kolom database sendiri ikut campur.
 - **Bahasa untuk identifier teknis (tabel, kolom, variabel, fungsi, nama file) wajib satu
-  bahasa konsisten — default Bahasa Inggris.** Domain project ini sering punya istilah dalam
+  bahasa konsisten — default Bahasa Inggris.** Domain project sering punya istilah dalam
   Bahasa Indonesia (nasabah, tunggakan, plafon, dst.), dan itu gampang bikin identifier teknis
   ikut campur (`customers` di satu tabel, `tunggakan` di tabel lain) — sama seperti masalah
   case-mixing di atas, ini bikin schema terasa acak dan menyulitkan pencarian/konsistensi
   jangka panjang. **Default: semua identifier teknis pakai Bahasa Inggris** (mis. `customers`,
   `overdue_amount`, `credit_limit`), walaupun istilah bisnisnya dalam Bahasa Indonesia —
-  terjemahkan secara konsisten, jangan campur. Konfirmasi sekali di awal project (bareng
-  pertanyaan Database & naming case di bagian 9); kalau user minta istilah Indonesia
+  terjemahkan secara konsisten, jangan campur. Konfirmasi sekali di awal project (kickoff,
+  AGENTS.md bagian 1); kalau user minta istilah Indonesia
   dipertahankan di identifier (mis. alasan domain/istilah baku), itu juga boleh, TAPI harus
   konsisten dipakai di semua identifier, bukan campur tergantung siapa yang nulis tabel itu.
   **Teks yang tampil ke user (label UI, pesan error, dokumentasi)** boleh dan sebaiknya tetap
   Bahasa Indonesia — aturan ini cuma untuk identifier teknis di kode/schema, bukan konten
   user-facing.
 - **Formatter wajib disiapkan & dijalankan sebelum baris kode pertama ditulis, bukan "nanti
-  aja".** Template ini SENGAJA tidak menyertakan file config formatter dari awal (biar nggak
-  ada config basi nempel di repo kalau stack akhirnya beda dari default) — begitu stack
-  dikonfirmasi ke user (bagian 9), agent wajib setup formatter yang sesuai SEBELUM menulis kode
-  pertama:
+  aja".** Template ini SENGAJA tidak menyertakan file config formatter (stack baru ditentukan
+  saat kickoff, jadi config yang dibawa dari awal pasti berisiko basi) — begitu stack
+  dikonfirmasi ke user (AGENTS.md bagian 9), agent wajib setup formatter yang sesuai SEBELUM
+  menulis kode pertama:
   - Ekosistem JS/TS (React, Next.js, Vue, dst.): Prettier (`.prettierrc`) + linter yang sesuai
     framework-nya (ESLint, dst.), jalankan `prettier --write` konsisten.
   - Python (FastAPI, Django, dst.): Ruff (format + lint sekaligus) di `pyproject.toml`.
   - Stack lain: pakai formatter standar ekosistemnya (mis. Laravel Pint untuk PHP) — jangan
-    biarkan project jalan tanpa formatter cuma karena stack-nya di luar default template ini.
+    biarkan project jalan tanpa formatter cuma karena stack-nya kurang umum.
   - Begitu formatter dipilih & disetup, catat di `memory/PRD.md` dan update bagian ini
     (Konvensi penulisan kode) dengan aturan konkretnya, supaya sesi berikutnya nggak setup
     ulang dari nol atau pakai config yang beda-beda tiap sesi.

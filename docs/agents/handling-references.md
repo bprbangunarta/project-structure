@@ -6,7 +6,7 @@
 
 **Masalah yang sering terjadi:** dikasih referensi, lalu referensi itu dicontek 100% —
 termasuk hal-hal yang sebenarnya harus tetap ikut aturan project ini ([code-standards.md](code-standards.md),
-skill context di AGENTS.md bagian 8). Referensi itu sinyal yang konkret dan langsung
+konteks produk yang ditetapkan saat kickoff, AGENTS.md bagian 1). Referensi itu sinyal yang konkret dan langsung
 kelihatan, jadi gampang mengalahkan aturan tertulis yang abstrak kalau tidak disadari secara
 eksplisit. Jangan biarkan ini terjadi:
 
@@ -15,9 +15,10 @@ eksplisit. Jangan biarkan ini terjadi:
   referensi yang mau diadopsi (mis. "layout grid dan struktur navigasinya") dan bagian mana
   yang tetap ikut aturan project ini, bukan ikut referensi (mis. palet warna/tone tetap
   konsisten dengan produk existing, bukan asal contek dari referensi kalau konteksnya beda —
-  lihat catatan skill di AGENTS.md bagian 8 soal konteks produk).
+  lihat konteks produk yang ditetapkan saat kickoff, AGENTS.md bagian 1).
 - **Kalau referensi bentrok dengan aturan tertulis di project ini** (mis. referensi gayanya
-  landing page yang flashy, padahal produk ini internal dashboard yang harus konsisten), STOP
+  landing page yang flashy, padahal konteks produk yang dikonfirmasi adalah tool internal yang
+  harus konsisten), STOP
   dan tanya user secara eksplisit mana yang menang — jangan diam-diam pilih salah satu.
 - **Referensi kode dari luar (StackOverflow, repo lain, AI tool lain) sama perlakuannya:**
   ambil pola/solusi teknisnya, tapi saring lewat konvensi kode di [code-standards.md](code-standards.md)

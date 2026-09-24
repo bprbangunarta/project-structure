@@ -8,15 +8,38 @@ File ini adalah **index** — beberapa panduan detail dipecah ke `docs/agents/` 
 ini tetap ringkas. Baca file yang dirujuk di titik yang disebutkan, jangan cuma baca
 judulnya lalu skip isinya.
 
-## 1. Status project
+## 1. Status project & kickoff
 
-**Fase: template.** Repo ini adalah kerangka awal untuk project baru, bukan produk final.
-Bagian 9 sudah punya stack *default* (FastAPI + React) dan bagian 8 punya asumsi konteks
-produk (internal admin dashboard) — tapi keduanya cuma default/asumsi kerja yang WAJIB
-dikonfirmasi ulang ke user begitu template ini dipakai untuk project nyata (lihat instruksi
-konfirmasi di bagian 8 & 9). Jangan anggap default itu keputusan final tanpa konfirmasi.
-Begitu dikonfirmasi (dipakai apa adanya atau diganti), catat di `memory/PRD.md` — jangan
-biarkan keputusan hanya hidup di riwayat chat.
+**Template universal.** Repo ini kerangka awal untuk jenis project apa pun (web app, tool
+internal/dashboard, landing page, API, CLI/library, mobile, pipeline data, dst.). Tidak ada
+asumsi soal jenis project, stack, database, atau konteks produk — semuanya ditentukan
+bersama user di awal.
+
+**Kickoff (wajib di project baru, sebelum menulis kode atau scaffold apa pun).** Baca
+`memory/PRD.md`. Kalau "Keputusan yang sudah diambil" di sana masih kosong, ini project baru:
+tanyakan hal berikut ke user — boleh dalam satu putaran, dengan rekomendasi + alasan singkat
+per pilihan. Keputusan akhir ada di user: **jangan pilih sendiri lalu jalan**, termasuk untuk
+hal yang tampak jelas.
+
+1. **Jenis project & konteks produk** — apa yang dibangun dan untuk siapa; punya UI atau
+   tidak; kalau punya UI: tool internal/dashboard atau client-facing (landing page,
+   marketing, produk publik). Ini menentukan skill UI mana yang relevan (bagian 8).
+2. **Stack per layer yang relevan** — backend, frontend, database, deployment/Docker
+   (bagian 9). "Belum ditentukan" bukan izin agent untuk memilih sendiri.
+3. **Konvensi penamaan** — default `snake_case` untuk tabel/kolom database dan Bahasa Inggris
+   untuk semua identifier teknis (detail di `docs/agents/code-standards.md`). Cukup
+   konfirmasi cepat, bukan dibahas dari nol.
+4. **Struktur folder** sesuai jenis project (bagian 4) dan **formatter/linter** sesuai stack
+   (`docs/agents/code-standards.md`).
+
+Setelah dijawab: catat di `memory/PRD.md`, isi bagian 3 dan 9 di file ini, sesuaikan struktur
+(bagian 4), lakukan **onboarding skill** (bagian 8: baca skill terpasang, putuskan sendiri
+mana yang dipakai dan kapan, catat rencananya), baru mulai kerja. Kalau PRD.md sudah berisi
+keputusan, project sudah berjalan: jangan ulangi kickoff, ikuti keputusan yang tercatat dan
+tanya hanya untuk hal baru yang belum diputuskan (mis. fitur yang butuh pilihan stack/database
+tambahan). Kalau keputusan sudah ada tapi "Rencana pemakaian skill" di PRD.md belum ada
+(project yang dibuat sebelum aturan ini), lakukan onboarding skill dulu sebelum lanjut kerja.
+Jangan biarkan keputusan hanya hidup di riwayat chat.
 
 ## 2. Standar kode & referensi eksternal
 
@@ -25,7 +48,8 @@ menggelembungkan file index ini:
 
 - **[docs/agents/code-standards.md](docs/agents/code-standards.md)** — standar production-ready
   (bukan prototipe), aturan bug fix lintas-kode, pairing validasi+UI, dan konvensi penulisan
-  kode. Baca sebelum langkah "Implement" (bagian 5, langkah 3).
+  kode. Aturan yang menyebut UI/database/API berlaku kalau project punya komponen itu. Baca
+  sebelum langkah "Implement" (bagian 5, langkah 3).
 - **[docs/agents/handling-references.md](docs/agents/handling-references.md)** — cara
   menangani referensi eksternal (screenshot UI, kode dari luar, situs lain) supaya tidak
   dicontek 100% dan melanggar aturan project. Baca setiap kali user kasih referensi, sebagai
@@ -33,10 +57,12 @@ menggelembungkan file index ini:
 
 ## 3. Project overview
 
-<!-- TODO: isi begitu ada kejelasan produk -->
+<!-- TODO: isi setelah kickoff -->
+- **Jenis project:** belum ditentukan
 - **Apa yang dibangun:** belum ditentukan
 - **Untuk siapa:** belum ditentukan
 - **Masalah yang diselesaikan:** belum ditentukan
+- **Punya UI?:** belum ditentukan (kalau ya: tool internal atau client-facing)
 
 ## 4. Struktur repo
 
@@ -44,25 +70,33 @@ menggelembungkan file index ini:
 .
 ├── AGENTS.md              # file ini — instruksi utama untuk agent
 ├── CLAUDE.md               # pointer ke AGENTS.md, jangan diisi konten lain
-├── docs/agents/             # panduan detail (standar kode, cara pakai referensi)
+├── docs/
+│   ├── agents/              # panduan detail (standar kode, cara pakai referensi)
+│   └── template-decisions.md # riwayat keputusan template (maintainer; boleh dihapus di project turunan)
 ├── memory/
 │   ├── PRD.md                # memory persisten lintas sesi — lihat bagian 6
 │   └── backlog.md            # catatan mentah — lihat bagian 7
-├── backend/                 # service backend (API, worker, dsb.)
-├── frontend/                # aplikasi frontend (web/mobile)
+├── backend/                 # titik awal project multi-service (lihat di bawah)
+├── frontend/                # titik awal project multi-service (lihat di bawah)
 ├── .agents/skills/           # skill yang di-install lewat skills.sh
+├── .claude/skills/           # symlink ke .agents/skills/ supaya terdaftar di Claude Code
 └── skills-lock.json         # lockfile skill (sumber, path, hash)
 ```
 
-**Kenapa `backend/` dan `frontend/` dipisah di root (bukan digabung jadi satu app):**
-tujuannya supaya masing-masing bisa punya `Dockerfile` dan container sendiri-sendiri,
-dan project ini bisa dijalankan backend-only, frontend-only, atau full-stack tanpa
-perlu merombak struktur. Ketika mulai menambah kode:
-- Setiap service/app baru yang butuh container sendiri masuk sebagai folder sejajar
-  (`backend/`, `frontend/`, atau nama service lain), bukan nested di dalam salah satunya.
-- `docker-compose.yml` (kalau/ketika dibuat) tinggal mount tiap folder sebagai service terpisah.
-- Kalau ternyata project ini jadi monolith murni, folder split ini tetap dipertahankan
-  demi konsistensi kecuali user eksplisit minta digabung.
+`backend/` dan `frontend/` adalah **titik awal untuk project multi-service** (mis. API + web
+app): dipisah supaya masing-masing punya `Dockerfile`/container sendiri dan bisa dijalankan
+terpisah. Sesuaikan dengan jenis project setelah kickoff, lalu update tree di atas:
+
+- **Multi-service** → pakai split ini; service tambahan masuk sebagai folder sejajar
+  (bukan nested), dan `docker-compose.yml` tinggal mount tiap folder sebagai service.
+- **Full-stack satu framework** (mis. Next.js, Laravel, Django) → konvensi framework di root
+  yang menang; hapus folder kosong yang tidak dipakai.
+- **Jenis lain** (CLI, library, mobile, pipeline data, situs statis) → struktur idiomatik
+  ekosistemnya (mis. `src/`, `cmd/`, `app/`); hapus `backend/` dan `frontend/` kalau tidak
+  relevan.
+- Apa pun yang dipilih, catat di `memory/PRD.md`. Folder tambahan di luar tree ini (mis.
+  `design-system/` dari skill) hanya dibuat dengan persetujuan user dan harus ditambahkan ke
+  tree.
 
 ## 5. Alur kerja per-task
 
@@ -72,14 +106,20 @@ pipeline otomatis — cukup jalankan langkah-langkahnya secara sadar):
 1. **Pahami maksud** — kalau instruksi ambigu atau berdampak besar, klarifikasi dulu ke user
    sebelum implementasi. Kalau user kasih referensi eksternal, baca
    [docs/agents/handling-references.md](docs/agents/handling-references.md) dulu.
-2. **Cek skill yang relevan SEBELUM mulai implement** — skill di `.agents/skills/` (tabel
-   lengkap di bagian 8) TIDAK otomatis kebaca, harus dipanggil aktif. Sebagai checklist wajib
-   tiap task, bukan cuma referensi pasif:
-   - Task menyentuh UI/komponen/layout? → panggil `ui-ux-pro-max`.
-   - Task merancang/merestrukturisasi module/service (bukan sekadar edit kecil)? → panggil
-     `codebase-design`.
-   - Task diminta review UI/aksesibilitas? → panggil `web-design-guidelines`.
-   - (Lihat bagian 8 untuk daftar lengkap + kondisi kapan skill lain dipasang/dipanggil.)
+2. **Terapkan rencana skill SEBELUM mulai implement** — skill di `.agents/skills/` tidak
+   otomatis dipakai; agent yang memutuskan dan memanggilnya, tanpa menunggu user menyuruh.
+   Buka "Rencana pemakaian skill" di `memory/PRD.md` (dibuat saat onboarding, bagian 8),
+   lalu tulis SATU BARIS keputusan di awal task: skill apa yang dipanggil dan kenapa, atau
+   "tidak ada skill relevan karena ...". Panggil skill sesuai pemicu di rencana itu. Bawaan
+   template (kalau rencana project belum ada, lakukan onboarding dulu):
+   - Task menyentuh UI (halaman/komponen/layout)? → `ui-taste`, ikuti playbook yang cocok.
+     `ui-ux-pro-max` hanya kalau butuh data spesifik (aturan form, chart, aksesibilitas,
+     panduan stack) — aturan prioritas di bagian 8.
+   - Task merancang/merestrukturisasi module/service (bukan edit kecil)? → `codebase-design`.
+   - Project client-facing dan `frontend-design` terpasang? → panggil untuk arah visual.
+   Kalau jenis task belum tercakup rencana, evaluasi ulang dan perbarui rencana. Kalau skill
+   yang seharusnya relevan tidak muncul atau tidak bisa dipanggil, bilang ke user — jangan
+   diam-diam dilewati.
 3. **Implement** — baca [docs/agents/code-standards.md](docs/agents/code-standards.md) kalau
    belum di sesi ini, lalu kerjakan perubahan sesuai standar & konvensi di situ.
 4. **Verifikasi** — jalankan test/build/lint yang relevan kalau tersedia; untuk perubahan UI,
@@ -124,59 +164,95 @@ ini). Saat diminta triage, pecah entri di `memory/backlog.md` jadi task jelas, p
 Skill di-manage lewat [skills.sh](https://www.skills.sh/) — jangan edit isinya manual,
 update lewat mekanisme skills.sh supaya `skills-lock.json` tetap akurat.
 
-| Skill | Kapan dipakai |
-|---|---|
-| `ui-ux-pro-max` | Saat mengerjakan struktur UI, komponen, design system, aksesibilitas, interaksi, responsive layout — referensi cepat untuk style/palette/font-pairing/ikon/chart. |
-| `web-design-guidelines` | Saat diminta review UI/aksesibilitas/UX terhadap best practice (mis. "review UI ini", "audit accessibility"). |
-| `ui-taste` (uizze.sh) | **Setiap kali membangun, redesign, atau review komponen/layar UI** — playbook anti-"AI slop" untuk hierarki visual, layout, dan detail polish. Ini yang secara eksplisit menyasar masalah "tampilan rapi tapi seleranya generik" — dipakai bukan cuma pas styling awal, tapi juga di setiap komponen baru dan sebagai **visual review terakhir** sebelum task UI dianggap selesai (lihat bagian 5, langkah 4). |
-| `codebase-design` (mattpocock/skills) | Saat merancang/merestrukturisasi modul kode (bukan UI) — prinsip modul yang "dalam" (interface kecil, perilaku banyak di belakangnya), testable, gampang dipelihara. Pakai saat bikin service/module baru di backend atau struktur komponen kompleks di frontend, bukan untuk perubahan kecil satu file. |
+**Registrasi:** skill baru harus terdaftar untuk Claude Code, kalau tidak Claude Code tidak
+melihatnya sama sekali. Setelah install, jalankan `npx skills list` dan pastikan kolom Agents
+memuat "Claude Code" (symlink-nya ada di `.claude/skills/`).
 
-**Asumsi konteks produk saat ini: internal admin dashboard, bukan landing page/marketing
-site.** Ini asumsi kerja dari percakapan waktu template ini disusun — SAMA seperti stack di
-bagian 9, ini WAJIB dikonfirmasi ulang ke user di awal tiap project baru, bukan otomatis
-diwariskan. Kalau dikonfirmasi tetap internal tool: prioritaskan konsistensi, kejelasan
-informasi, dan pola UI yang familiar (tabel data, form, navigasi admin) di atas eksplorasi
-estetika/brand identity.
+**Onboarding skill (wajib sekali per project, dan tiap ada skill baru dipasang).** Tujuannya
+agent memutuskan sendiri skill mana yang dipakai dan kapan, supaya user tidak perlu
+menyuruh tiap kali:
 
-**Skill yang TIDAK terpasang tapi disarankan tergantung konteks:**
+1. Baca `SKILL.md` tiap skill di `.agents/skills/` (file utamanya saja; file referensi dan
+   data dibuka saat dibutuhkan).
+2. Untuk tiap skill, putuskan: relevan untuk project ini atau tidak. Kalau ya, tentukan
+   pemicu konkretnya (jenis task/kondisi yang membuatnya dipanggil, mis. "task menyentuh
+   halaman atau komponen → `ui-taste`, playbook operate.md karena ini dashboard") dan kapan
+   TIDAK dipakai. Kalau tidak relevan, lepas (`npx skills remove <nama>`) atau tandai tidak
+   dipakai beserta alasannya.
+3. Tulis hasilnya di `memory/PRD.md`, bagian "Rencana pemakaian skill" (tabel: skill,
+   relevan?, dipakai saat, tidak dipakai saat), lalu beri tahu user ringkasannya. User boleh
+   mengoreksi, tapi keputusan awalnya ada di agent.
+4. Setelah itu rencana dijalankan otomatis di awal tiap task (bagian 5, langkah 2). Rencana di
+   PRD.md adalah keputusan spesifik project dan yang berlaku kalau berbeda dari tabel bawaan
+   di bawah ini.
+
+Tabel di bawah adalah pemicu bawaan template, dipakai sebagai bahan onboarding.
+
+| Skill | Berlaku untuk | Kapan dipakai |
+|---|---|---|
+| `ui-taste` (uizze.sh) | Project ber-UI | Setiap membangun, redesign, atau review UI. Penentu arah visual untuk UI produk (playbook: new-work, operate untuk dashboard/tool, polish, audit), dan visual review terakhir sebelum task UI dilaporkan selesai (bagian 5, langkah 4). |
+| `ui-ux-pro-max` | Project ber-UI | **Sumber data referensi, bukan penentu arah:** aturan UX/aksesibilitas, form, chart, palet, font, panduan per-stack. Dipanggil kalau task butuh data spesifik itu. |
+| `codebase-design` (mattpocock/skills) | Semua project non-trivial | Merancang/merestrukturisasi modul kode: modul "dalam" (interface kecil, perilaku banyak di belakangnya), testable, mudah dipelihara. Untuk service/module baru atau struktur kompleks, bukan perubahan kecil satu file. |
+
+**Aturan prioritas & pemakaian:**
+
+- **UI produk (tool internal, dashboard, aplikasi):** `ui-taste` menentukan arah visual —
+  familiar, padat-informasi, tanpa dekorasi. Output `--design-system` dari `ui-ux-pro-max`
+  tidak dipakai sebagai arah untuk kasus ini: tes pada kueri dashboard internal
+  menghasilkan pola landing page dan gaya glassmorphism. Pakai `--domain` (ux, chart, color,
+  typography) atau `--stack` saja.
+- **UI client-facing (landing page, marketing, produk publik):** `frontend-design` (kalau
+  terpasang) dan `ui-taste` menentukan arah; `--design-system` dari `ui-ux-pro-max` boleh
+  jadi masukan, tetap dikonfirmasi user.
+- **Skrip `ui-ux-pro-max`:** jalankan `python3 .agents/skills/ui-ux-pro-max/scripts/search.py
+  "<kueri>" --domain <domain>`. SKILL.md-nya memakai `${CLAUDE_PLUGIN_ROOT}` yang tidak diset
+  di sini, jadi path itu gagal. Jangan pakai `--persist` (menulis folder `design-system/`)
+  tanpa persetujuan user; kalau disetujui, tambahkan ke tree bagian 4 dan catat di PRD.md.
+- **`codebase-design`:** kosakata khususnya (module, seam, adapter) hanya untuk diskusi
+  desain; laporan ke user tetap bahasa sederhana. "Design It Twice" (memanggil 3+ sub-agent)
+  hanya kalau user minta. Rujukan `CONTEXT.md` di skill itu diganti `memory/PRD.md` dan
+  AGENTS.md sebagai sumber bahasa domain.
+
+**Project tanpa UI** (API saja, CLI, library, pipeline data): lepas skill UI saat kickoff
+(`npx skills remove ui-taste ui-ux-pro-max`) dan catat di PRD.md.
+
+**Tidak terpasang, tapi disarankan tergantung konteks:**
 
 | Skill | Kapan disarankan |
 |---|---|
-| `frontend-design` (anthropics/skills) | **Kalau user konfirmasi project ini butuh frontend untuk landing page/marketing site/produk client-facing** (bukan internal dashboard) — pasang lagi via `npx skills add anthropics/skills -s frontend-design`. Skill ini penting untuk kasus itu (arah desain visual yang distinctive, bukan templated); jangan skip hanya karena kebiasaan template ini defaultnya admin-dashboard-context. Sebelumnya dilepas karena konteks produk saat itu internal dashboard, bukan karena skill-nya buruk. |
+| `frontend-design` (anthropics/skills) | Kalau kickoff menetapkan project butuh frontend client-facing (landing page, marketing site, produk publik). Pasang via `npx skills add anthropics/skills -s frontend-design`, lalu cek registrasinya (kolom Agents). Penting untuk kasus itu (arah visual distinctive, bukan templated) — jangan dilewati. Tidak terpasang secara default karena tidak semua project punya UI client-facing. |
 
-Skill set saat ini fokus ke UI/UX dashboard. Begitu stack backend ditentukan, evaluasi apakah
-perlu menambah skill yang relevan (API design, database, testing framework spesifik stack
-tersebut) lewat skills.sh, dan catat di tabel ini.
+**Sengaja tidak dipasang:** `web-design-guidelines` (vercel-labs). Skill ini mengambil
+aturannya dari branch `main` GitHub lewat WebFetch setiap dipakai (tidak di-pin, butuh
+jaringan, instruksi datang dari luar repo), dan fungsinya sudah tercakup `ui-taste` dan
+`ui-ux-pro-max`. Jangan dipasang lagi tanpa alasan baru.
+
+Setelah stack ditentukan, evaluasi apakah perlu skill tambahan (API design, database,
+testing untuk stack itu) lewat skills.sh, dan catat di tabel ini.
 
 ## 9. Stack teknis
 
-**Default: FastAPI (backend) + React (frontend).** Ini bukan keputusan final otomatis —
-di awal setiap project/fitur baru yang dimulai dari template ini, agent WAJIB bertanya ke
-user dulu untuk **setiap** baris di bawah (backend, frontend, database, deployment) — pakai
-default/rekomendasi, atau ganti? **Jangan pernah memilih sendiri lalu langsung pakai tanpa
-konfirmasi**, termasuk database — "belum ditentukan" bukan berarti agent bebas putuskan
-sendiri, itu artinya wajib ditanyakan dulu ke user sebelum schema/migration pertama dibuat.
-Begitu user menjawab, catat hasilnya di `memory/PRD.md` bagian "Keputusan yang sudah diambil",
-lalu update baris di bawah ini.
+**Tidak ada stack default.** Stack ditentukan bersama user saat kickoff (bagian 1) dan diisi
+di bawah. Untuk tiap layer, agent boleh memberi rekomendasi + alasan, tapi keputusan akhir di
+user: "belum ditentukan" artinya WAJIB ditanyakan dulu — termasuk database (sebelum
+schema/migration pertama) — bukan diputuskan sendiri walau pilihannya tampak jelas. Fitur baru
+yang butuh pilihan baru (database, queue, auth provider tambahan, dst.) juga ditanyakan dulu.
 
-- Backend: FastAPI (default, perlu dikonfirmasi ulang tiap project baru)
-- Frontend: React (default, perlu dikonfirmasi ulang tiap project baru)
-- Database: belum ditentukan — **wajib ditanyakan ke user** sebelum bikin schema/migration
-  pertama; jangan diam-diam pilih sendiri (mis. auto pilih PostgreSQL/SQLite) walau itu pilihan
-  yang masuk akal. Boleh kasih rekomendasi dengan alasannya, tapi keputusan akhir tetap user.
+- Backend: belum ditentukan
+- Frontend: belum ditentukan
+- Database: belum ditentukan
 - Deployment/Docker: belum ditentukan
+- Formatter/linter: belum ditentukan
 
-**Catatan soal struktur folder (lihat bagian 4):** FastAPI + React secara alami cocok dengan
-split `backend/`/`frontend/` yang sudah ada (dua service independen, dua container). Tapi
-kalau user memilih stack full-stack opinionated (mis. Next.js App Router, Laravel, Django
-dengan template server-side) yang punya struktur folder sendiri, **konvensi framework itu
-yang menang** — jangan paksa masuk ke split `backend/`/`frontend/` generik ini kalau
-bertentangan. Diskusikan dan update bagian 4 kalau itu terjadi.
+Contoh titik awal per jenis project — bahan diskusi saat kickoff, **bukan default**:
 
-**Catatan implementasi untuk pola validasi+UI:** dengan FastAPI, validasi field didefinisikan
-lewat Pydantic model — field constraint (`pattern`, `max_length`, tipe, dst.) ada di satu
-tempat sebagai source of truth. Di React, jangan bikin ulang aturan itu secara manual di tiap
-form; bungkus tiap tipe field yang berulang (nomor telepon, email, NIK, dst.) jadi komponen
-input reusable (mis. `<PhoneNumberInput />`) yang sudah include `inputMode`/`pattern`/
-`maxLength` yang sesuai — lihat detail di
-[docs/agents/code-standards.md](docs/agents/code-standards.md).
+- Web app dengan API + UI terpisah (dua container): mis. FastAPI + React
+- Full-stack satu framework: mis. Next.js, Laravel, Django
+- Landing page / situs konten: mis. Astro atau Next.js (statis)
+- API saja: mis. FastAPI, Express, Go
+- CLI / library: bahasa sesuai ekosistem target
+- Mobile: mis. React Native, Flutter, native
+- Otomasi / pipeline data: mis. Python
+
+Kalau stack yang dipilih punya struktur folder sendiri, konvensi framework itu yang menang
+(bagian 4). Catat pilihan final di `memory/PRD.md` dan update daftar di atas.
